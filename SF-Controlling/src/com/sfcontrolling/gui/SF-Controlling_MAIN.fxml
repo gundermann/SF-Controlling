@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language javascript?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" snapToPixel="false" xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfcontrolling.gui.MainGuiController">
+  <children>
+    <BorderPane fx:id="bpMain">
+      <left>
+        <VBox fx:id="vBoxEntries">
+          <children>
+            <TextField fx:id="tfSearch" onKeyReleased="#findEntry" promptText="Suche" VBox.vgrow="ALWAYS">
+              <VBox.margin>
+                <Insets />
+              </VBox.margin>
+            </TextField>
+            <TreeView fx:id="tvEntries" onMouseClicked="#selectEntry" prefHeight="550.0" showRoot="false" />
+          </children>
+        </VBox>
+      </left>
+      <top>
+        <ToolBar prefWidth="750.0">
+          <items>
+            <Button fx:id="btNeuerEintrag" mnemonicParsing="false" onAction="#newEntry" text="Neuer Eintrag" />
+            <Button fx:id="btEintragBearbeiten" disable="true" mnemonicParsing="false" onAction="#changeEntry" text="Eintrag Bearbeiten" />
+            <Button fx:id="btSummary" mnemonicParsing="false" onAction="#openSummary" text="Übersicht" />
+            <Button fx:id="btSettings" mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" />
+          </items>
+        </ToolBar>
+      </top>
+    </BorderPane>
+  </children>
+</AnchorPane>

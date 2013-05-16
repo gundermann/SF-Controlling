@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language javascript?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfcontrolling.gui.CatSettingsGuiController">
+  <children>
+    <GridPane>
+      <children>
+        <ComboBox fx:id="cbNewCategory" onAction="#selectCategory" prefWidth="200.0" promptText="Neue Kategorie" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+        <Label text="Bezeichnung:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="tfNewTitle" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+        <Button id="bt" fx:id="btNewCAtegory" mnemonicParsing="false" onAction="#saveNewCategory" prefWidth="100.0" text="Speichern" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="5" />
+        <Button fx:id="btDeleteCategory" mnemonicParsing="false" onAction="#delSelectedCategory" prefWidth="100.0" text="Löschen" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.rowIndex="5" />
+        <Label text="Förderung:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Slider fx:id="slSubsity" onMouseDragged="#changeSubsityRateBySlider" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+        <TextField fx:id="tfSubsity" prefWidth="200.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </children>
+</AnchorPane>
