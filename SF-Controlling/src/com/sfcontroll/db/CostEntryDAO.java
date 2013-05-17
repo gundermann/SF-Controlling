@@ -14,17 +14,6 @@ import com.sfcontroll.business.Entry;
 
 public class CostEntryDAO
 {
-//        public static List<DTOCostsEntry> getAllEntry(){
-//        	Session session = null;
-//        	sessionFactory = HibernateUtil.getSessionFactory();
-//        	session = sessionFactory.openSession();
-//        	
-//        	Criteria criteria = session.createCriteria(DTOCostsEntry.class);
-//        	List<DTOCostsEntry> costListe = criteria.list();
-//        	
-//        	return costListe;
-//        }
-	
 	public static List<DTOCostsEntry> getAllEntriesFromDB(){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction =  session.beginTransaction();
@@ -62,7 +51,6 @@ public class CostEntryDAO
 		public static List<DTOCostsEntry> getEntriesByName(String name) {
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			Transaction transaction =  session.beginTransaction();
-//			List<DTOCostsEntry> foundEntries = session.createSQLQuery("select * from costs where name LIKE '" + name + "%' OR name LIKE '%" +name +"';").list();
 			Criteria criteria = session.createCriteria(DTOCostsEntry.class)
 					.add(Restrictions.disjunction()
 					.add(Restrictions.like("name", name+"%"))

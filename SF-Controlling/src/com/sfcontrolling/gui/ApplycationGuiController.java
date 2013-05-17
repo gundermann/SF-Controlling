@@ -1,6 +1,8 @@
 package com.sfcontrolling.gui;
 
 
+import gui.TeilvorgaeneTableData;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,6 +22,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ApplycationGuiController implements Initializable{
 
@@ -79,7 +82,7 @@ public class ApplycationGuiController implements Initializable{
 	
 	@FXML
 	private void addCost(){
-		
+		tCosts.getColumns().get(0).setCellFactory(new PropertyValueFactory<CostTableData, Object>("cbCosttypes"));
 	}
 	
 	@FXML

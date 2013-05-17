@@ -77,7 +77,7 @@
             <fx:reference source="x1" />
           </panes>
         </Accordion>
-        <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Erfassen" />
+        <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Speichern" />
       </children>
     </VBox>
   </children>
