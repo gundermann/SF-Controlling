@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language javascript?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.sfcontrolling.gui.ApplycationGuiController">
+  <children>
+    <VBox id="VBox" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <children>
+        <HBox prefWidth="200.0">
+          <children>
+            <Label id="headline" alignment="TOP_LEFT" text="Neuer Eintrag:" wrapText="true" />
+            <TextField fx:id="tfTitle" onMouseExited="#checkTitle" prefWidth="200.0" />
+          </children>
+        </HBox>
+        <ComboBox fx:id="cbCategory" prefWidth="199.0" promptText="Kategorie wählen" visibleRowCount="50" />
+        <HBox prefWidth="200.0">
+          <children>
+            <Label fx:id="lbDate" text="Datum:" />
+            <TextField fx:id="tfDate" onMouseExited="#checkDate" prefWidth="200.0" promptText="DD.MM.YYYY" />
+          </children>
+        </HBox>
+        <Accordion prefHeight="400.0">
+          <expandedPane>
+            <TitledPane id="tpCosts" expanded="true" fx:id="x1" prefHeight="358.0" text="Förderung">
+              <content>
+                <AnchorPane>
+                  <children>
+                    <BorderPane prefHeight="324.0">
+                      <center>
+                        <TableView id="table" prefHeight="368.0" prefWidth="400.0">
+                          <columns>
+                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Kostenart" />
+                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Betrag" />
+                            <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Bewilligt" />
+                          </columns>
+                        </TableView>
+                      </center>
+                    </BorderPane>
+                  </children>
+                </AnchorPane>
+              </content>
+            </TitledPane>
+          </expandedPane>
+          <panes>
+            <TitledPane fx:id="tpCosts" expanded="false" prefHeight="358.0" text="Kosten">
+              <content>
+                <AnchorPane>
+                  <children>
+                    <BorderPane prefHeight="324.0">
+                      <center>
+                        <TableView id="table" fx:id="tCosts" prefHeight="368.0" prefWidth="400.0">
+                          <columns>
+                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Kostenart" />
+                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Betrag" />
+                          </columns>
+                        </TableView>
+                      </center>
+                      <top>
+                        <ToolBar prefWidth="200.0">
+                          <items>
+                            <Button id="btAddcosts" fx:id="btAddCosts" mnemonicParsing="false" onAction="#addCost" text="Hinzufügen" />
+                            <Button fx:id="btDeleteCost" disable="true" mnemonicParsing="false" onAction="#deleteCost" text="Entfernen" />
+                          </items>
+                        </ToolBar>
+                      </top>
+                    </BorderPane>
+                  </children>
+                </AnchorPane>
+              </content>
+            </TitledPane>
+            <fx:reference source="x1" />
+          </panes>
+        </Accordion>
+        <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Erfassen" />
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>
