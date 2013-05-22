@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import com.sfcontroll.business.Costtype;
 import com.sfcontroll.business.Entry;
 import com.sfcontroll.db.CostEntryDAO;
+import com.sfcontroll.db.CosttypeDAO;
 import com.sfcontroll.db.DTOCostsEntry;
 
 import javafx.beans.property.BooleanProperty;
@@ -48,7 +49,7 @@ public class ApplycationGuiController implements Initializable{
 	private TableView<CostTableData> tCosts;
 	
 	@FXML
-	private TableColumn<CostTableData, Costtype> ctcCosttype;
+	private TableColumn<CostTableData, String> ctcCosttype;
 	
 	@FXML 
 	private TableColumn<CostTableData, Double> ctcValue;
@@ -98,18 +99,22 @@ public class ApplycationGuiController implements Initializable{
 
 		ctcCosttype.setCellValueFactory(new PropertyValueFactory("cbCosttype"));
 		ctcValue.setCellValueFactory(new PropertyValueFactory("value"));
+		ctcValue.setEditable(true);
 		
-		ctcCosttype.setCellFactory(new Callback<TableColumn<CostTableData,Costtype>,TableCell<CostTableData,Costtype>>(){        
+		ctcCosttype.setCellFactory(new Callback<TableColumn<CostTableData,String>,TableCell<CostTableData,String>>(){        
 			@Override
-			public TableCell<CostTableData, Costtype> call(TableColumn<CostTableData, Costtype> param) {                
-				TableCell<CostTableData, Costtype> cell = new TableCell<CostTableData, Costtype>(){
+			public TableCell<CostTableData, String> call(TableColumn<CostTableData, String> param) {                
+				TableCell<CostTableData, String> cell = new TableCell<CostTableData, String>(){
 					@Override
-					public void updateItem(Costtype item, boolean empty) {
+					public void updateItem(String item, boolean empty) {
 						if(item!=null){
 
-						   ComboBox<String> box = new ComboBox<String>();                                                      
-//						   box.getSelectionModel().select();
-						   //SETTING ALL THE GRAPHICS COMPONENT FOR CELL
+						   ComboBox<String> box = new ComboBox<String>();
+						   box.promptTextProperty().set("Kostentyp wÃ¤hlen");
+						   box.getSelectionModel().select(0);
+						   for(Costtype type : CosttypeDAO.getAllCategeriesFromDB()){
+							   box.getItems().add(type.getCategoryName());
+						   }
 						   setGraphic(box);
 						} 
 					}
@@ -178,7 +183,7 @@ public class ApplycationGuiController implements Initializable{
 		SimpleStringProperty cat = new SimpleStringProperty();
 		SimpleStringProperty date = new SimpleStringProperty();
 		name.set("");
-		cat.set("Kategorie wählen");
+		cat.set("Kategorie wï¿½hlen");
 		date.set("");
 		
 		if(currentEntry != null){

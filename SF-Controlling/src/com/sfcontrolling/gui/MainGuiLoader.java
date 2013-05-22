@@ -29,7 +29,7 @@ public class MainGuiLoader extends Application{
          stage.setResizable(false);
          stage.show();
     
-         MainGuiController.reactOnNewEntry();
+//         MainGuiController.reactOnNewEntry();
 	}
 
 	public static void main(String[] arg){
