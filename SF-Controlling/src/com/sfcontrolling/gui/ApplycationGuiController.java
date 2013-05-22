@@ -1,28 +1,34 @@
 package com.sfcontrolling.gui;
 
 
-import gui.TeilvorgaeneTableData;
-
 import java.net.URL;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
+
+import com.sfcontroll.business.Costtype;
 import com.sfcontroll.business.Entry;
 import com.sfcontroll.db.CostEntryDAO;
 import com.sfcontroll.db.DTOCostsEntry;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 public class ApplycationGuiController implements Initializable{
 
@@ -39,7 +45,13 @@ public class ApplycationGuiController implements Initializable{
 	private Button btAplly;
 	
 	@FXML
-	private TableView<String> tCosts;
+	private TableView<CostTableData> tCosts;
+	
+	@FXML
+	private TableColumn<CostTableData, Costtype> ctcCosttype;
+	
+	@FXML 
+	private TableColumn<CostTableData, Double> ctcValue;
 	
 	@FXML
 	private Button btAddCosts;
@@ -82,7 +94,61 @@ public class ApplycationGuiController implements Initializable{
 	
 	@FXML
 	private void addCost(){
-		tCosts.getColumns().get(0).setCellFactory(new PropertyValueFactory<CostTableData, Object>("cbCosttypes"));
+		tCosts.getItems().add(new CostTableData());
+
+		ctcCosttype.setCellValueFactory(new PropertyValueFactory("cbCosttype"));
+		ctcValue.setCellValueFactory(new PropertyValueFactory("value"));
+		
+		ctcCosttype.setCellFactory(new Callback<TableColumn<CostTableData,Costtype>,TableCell<CostTableData,Costtype>>(){        
+			@Override
+			public TableCell<CostTableData, Costtype> call(TableColumn<CostTableData, Costtype> param) {                
+				TableCell<CostTableData, Costtype> cell = new TableCell<CostTableData, Costtype>(){
+					@Override
+					public void updateItem(Costtype item, boolean empty) {
+						if(item!=null){
+
+						   ComboBox<String> box = new ComboBox<String>();                                                      
+//						   box.getSelectionModel().select();
+						   //SETTING ALL THE GRAPHICS COMPONENT FOR CELL
+						   setGraphic(box);
+						} 
+					}
+				};                           
+				return cell;
+			}	
+		});
+		
+	}
+
+	public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
+		private final CheckBox checkBox;
+		private ObservableValue<T> ov;
+
+		public CheckBoxTableCell() {
+			this.checkBox = new CheckBox();
+			this.checkBox.setAlignment(Pos.CENTER);
+
+			setAlignment(Pos.CENTER);
+			setGraphic(checkBox);
+		} 
+
+		@Override 
+		public void updateItem(T item, boolean empty) {
+			super.updateItem(item, empty);
+			if (empty) {
+				setText(null);
+				setGraphic(null);
+			} else {
+				setGraphic(checkBox);
+				if (ov instanceof BooleanProperty) {
+					checkBox.selectedProperty().unbindBidirectional((BooleanProperty) ov);
+				}
+				ov = getTableColumn().getCellObservableValue(getIndex());
+				if (ov instanceof BooleanProperty) {
+					checkBox.selectedProperty().bindBidirectional((BooleanProperty) ov);
+				}
+			}
+		}
 	}
 	
 	@FXML

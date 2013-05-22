@@ -6,10 +6,13 @@ import com.sfcontroll.db.CosttypeDAO;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
 
 public class CostTableData {
 	
-	private SimpleObjectProperty<ComboBox<String>> cbCosttype;
+	private SimpleStringProperty cbCosttype;
 	
 	private SimpleStringProperty value;
 	
@@ -18,19 +21,37 @@ public class CostTableData {
 	}
 
 	private void initTableData() {
-		ComboBox<String> cb = new ComboBox<String>();
-		for(Costtype costtype : CosttypeDAO.getAllCategeriesFromDB()){
-			cb.getItems().add(costtype.getCategoryName());
-		}
+//		for(Costtype costtype : CosttypeDAO.getAllCategeriesFromDB()){
+//			cb.getItems().add(costtype.getCategoryName());
+//		}
+//		
+//		this.cbCosttype = new SimpleStringProperty(cb);
 		
-		this.cbCosttype = new SimpleObjectProperty<ComboBox<String>>(cb);
+//		cbCosttype.setCellFactory(new Callback<TableColumn<CostTableData, cbCosttype>,TableCell<CostTableData,cbCosttype>>(){        
+//			@Override
+//			public TableCell<CostTableData, String> call(TableColumn<CostTableData, String> param) {                
+//				TableCell<CostTableData, String> cell = new TableCell<CostTableData, String>(){
+//					@Override
+//					public void updateItem(String item, boolean empty) {
+//						if(item!=null){
+//
+//						   ComboBox<String> box = new ComboBox<String>();                                                      
+////						   box.getSelectionModel().select();
+//						   //SETTING ALL THE GRAPHICS COMPONENT FOR CELL
+//						   setGraphic(box);
+//						} 
+//					}
+//				};                           
+//				return cell;
+//			}	
+//		});
 	}
 
-	public ComboBox<String> getCbCosttype() {
+	public String getCbCosttype() {
 		return cbCosttype.get();
 	}
 
-	public void setCbCosttype(ComboBox<String> cbCosttype) {
+	public void setCbCosttype(String cbCosttype) {
 		this.cbCosttype.set(cbCosttype);
 	}
 

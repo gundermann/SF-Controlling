@@ -27,7 +27,7 @@
         </HBox>
         <Accordion prefHeight="400.0">
           <expandedPane>
-            <TitledPane id="tpCosts" expanded="true" fx:id="x1" prefHeight="358.0" text="Förderung">
+            <TitledPane id="tpCosts" fx:id="x1" prefHeight="358.0" text="Förderung">
               <content>
                 <AnchorPane>
                   <children>
@@ -77,7 +77,7 @@
             <fx:reference source="x1" />
           </panes>
         </Accordion>
-        <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Erfassen" />
+        <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Speichern" />
       </children>
     </VBox>
   </children>
