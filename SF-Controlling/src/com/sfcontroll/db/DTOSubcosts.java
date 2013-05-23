@@ -1,22 +1,64 @@
 package com.sfcontroll.db;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Entity
+@Table(name = "subcosts")
 public class DTOSubcosts {
 
 	@Id
-	@Column
-	private int id;
+	private int subcostid;
 	
-	@Column (name = "costtype")
-	private int costtype;
+	private int entryid;
 	
-	@Column (name = "value")
+	private String costtype;
+	
 	private double value;
 	
-	@Column (name = "subsityValue")
-	private double subsityValue;
+	private double substity;
+
+	public int getSubcostid() {
+		return subcostid;
+	}
+
+	public void setSubcostid(int subcostid) {
+		this.subcostid = subcostid;
+	}
+
+	public int getEntryid() {
+		return entryid;
+	}
+
+	public void setEntryid(int entryid) {
+		this.entryid = entryid;
+	}
+
+	public String getCosttype() {
+		return costtype;
+	}
+
+	public void setCosttype(String costtype) {
+		this.costtype = costtype;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public double getSubstity() {
+		return substity;
+	}
+
+	public void setSubstity(double substity) {
+		this.substity = substity;
+	}
+	
+	
 }

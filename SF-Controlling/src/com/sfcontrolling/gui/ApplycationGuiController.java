@@ -12,6 +12,8 @@ import com.sfcontroll.business.Entry;
 import com.sfcontroll.db.CostEntryDAO;
 import com.sfcontroll.db.CosttypeDAO;
 import com.sfcontroll.db.DTOCostsEntry;
+import com.sfcontroll.db.DTOSubcosts;
+import com.sfcontroll.db.SubcostDAO;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -52,7 +54,7 @@ public class ApplycationGuiController implements Initializable{
 	private TableColumn<CostTableData, String> ctcCosttype;
 	
 	@FXML 
-	private TableColumn<CostTableData, Double> ctcValue;
+	private TableColumn<CostTableData, String> ctcValue;
 	
 	@FXML
 	private Button btAddCosts;
@@ -79,23 +81,31 @@ public class ApplycationGuiController implements Initializable{
 	
 	@FXML
 	protected void applyEntry(){
-		int day = Integer.parseInt(tfDate.getText().substring(0, 2));
-		int month = Integer.parseInt(tfDate.getText().substring(3, 5));
-		int year = Integer.parseInt(tfDate.getText().substring(6));
+//		int day = Integer.parseInt(tfDate.getText().substring(0, 2));
+//		int month = Integer.parseInt(tfDate.getText().substring(3, 5));
+//		int year = Integer.parseInt(tfDate.getText().substring(6));
 		Date date = new Date();
-		date.setDate(day);
-		date.setMonth(month);
-		date.setYear(year);
-		
+//		date.setDate(day);
+//		date.setMonth(month);
+//		date.setYear(year);
+//		
 		Entry newEntry = new Entry(tfTitle.getText(), cbCategory.getSelectionModel().getSelectedItem(), date);
-		
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
+
+		for(CostTableData costData: tCosts.getItems()){
+			DTOSubcosts subcosts = new DTOSubcosts();
+			subcosts.setEntryid(CostEntryDAO.getEntrieID(newEntry));
+			subcosts.setCosttype(costData.getCbCosttype());
+			subcosts.setValue(Double.parseDouble(costData.getValue()));
+			SubcostDAO.saveOrUpedateSubcost(subcosts);
+		}
 		MainGuiController.reactOnNewEntry();
-	}
-	
+		
+	}	
 	@FXML
 	private void addCost(){
 		tCosts.getItems().add(new CostTableData());
+		tCosts.setEditable(true);
 
 		ctcCosttype.setCellValueFactory(new PropertyValueFactory("cbCosttype"));
 		ctcValue.setCellValueFactory(new PropertyValueFactory("value"));
@@ -110,12 +120,29 @@ public class ApplycationGuiController implements Initializable{
 						if(item!=null){
 
 						   ComboBox<String> box = new ComboBox<String>();
-						   box.promptTextProperty().set("Kostentyp w√§hlen");
-						   box.getSelectionModel().select(0);
+						   box.promptTextProperty().set("Kostentyp w‰hlen");
+//						   box.getSelectionModel().select(0);
 						   for(Costtype type : CosttypeDAO.getAllCategeriesFromDB()){
 							   box.getItems().add(type.getCategoryName());
 						   }
 						   setGraphic(box);
+						} 
+					}
+				};                           
+				return cell;
+			}	
+		});
+		
+		ctcValue.setCellFactory(new Callback<TableColumn<CostTableData,String>,TableCell<CostTableData,String>>(){        
+			@Override
+			public TableCell<CostTableData, String> call(TableColumn<CostTableData, String> param) {                
+				TableCell<CostTableData, String> cell = new TableCell<CostTableData, String>(){
+					@Override
+					public void updateItem(String item, boolean empty) {
+						if(item!=null){
+
+						   TextField tf = new TextField();
+						   setGraphic(tf);
 						} 
 					}
 				};                           

@@ -60,4 +60,17 @@ public class CostEntryDAO
 			transaction.commit();
 			return criteria.list();
 		}
+
+		public static int getEntrieID(Entry entry) {
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			Transaction transaction =  session.beginTransaction();
+			Criteria criteria = session.createCriteria(DTOCostsEntry.class)
+					.add(Restrictions.conjunction()
+					.add(Restrictions.eq("name",entry.getName()))
+					.add(Restrictions.like("category",entry.getCategory()))
+					.add(Restrictions.like("date", entry.getDate())));
+			
+			transaction.commit();
+			return ((DTOCostsEntry) criteria.list().get(0)).getId();
+		}
 }

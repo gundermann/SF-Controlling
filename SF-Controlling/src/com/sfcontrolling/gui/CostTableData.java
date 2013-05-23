@@ -13,7 +13,7 @@ public class CostTableData {
 	}
 
 	private void initTableData() {
-		this.cbCosttype = new SimpleStringProperty("Kostenart w√§hlen");
+		this.cbCosttype = new SimpleStringProperty("Kostenart w‰hlen");
 		
 	}
 

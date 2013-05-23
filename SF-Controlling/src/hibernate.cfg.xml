@@ -21,6 +21,7 @@
 <property name="hibernate.current_session_context_class">thread</property>
 <mapping class="com.sfcontroll.db.DTOCostsEntry"/>
 <mapping class="com.sfcontroll.business.Costtype" />
+<mapping class="com.sfcontroll.db.DTOSubcosts" />
 
 </session-factory>
 </hibernate-configuration>
