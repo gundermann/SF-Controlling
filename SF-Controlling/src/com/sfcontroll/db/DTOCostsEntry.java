@@ -3,7 +3,6 @@ package com.sfcontroll.db;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -14,7 +13,6 @@ import javax.persistence.Temporal;
 public class DTOCostsEntry{
 
 	@Id
-	@GeneratedValue
 	private int id;
 	
 	private String name;
@@ -58,5 +56,4 @@ public class DTOCostsEntry{
 		this.date = date;
 	}
 
-	
 }

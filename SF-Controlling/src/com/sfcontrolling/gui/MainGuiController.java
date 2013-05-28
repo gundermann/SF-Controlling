@@ -60,7 +60,7 @@ public class MainGuiController {
 	
 	@FXML
 	public void selectEntry(){
-		ApplycationGuiController.setCurrentEntry(CostEntryDAO.getEntryByPossibleIdAndName(tvEntries.getSelectionModel().getSelectedIndex(), tvEntries.getSelectionModel().getSelectedItem().getValue()));
+		ApplycationGuiController.setCurrentEntry(CostEntryDAO.getEntryByPossibleIdAndName(tvEntries.getSelectionModel().getSelectedIndex()+1, tvEntries.getSelectionModel().getSelectedItem().getValue()));
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 				 "SF-Controlling_APPLYCATION.fxml"));
 

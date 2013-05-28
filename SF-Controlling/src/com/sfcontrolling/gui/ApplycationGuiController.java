@@ -3,7 +3,6 @@ package com.sfcontrolling.gui;
 
 import java.net.URL;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 
@@ -81,19 +80,33 @@ public class ApplycationGuiController implements Initializable{
 	
 	@FXML
 	protected void applyEntry(){
-//		int day = Integer.parseInt(tfDate.getText().substring(0, 2));
-//		int month = Integer.parseInt(tfDate.getText().substring(3, 5));
-//		int year = Integer.parseInt(tfDate.getText().substring(6));
+		int year = Integer.parseInt(tfDate.getText().substring(0, 4));
+		int month = Integer.parseInt(tfDate.getText().substring(5, 7));
+		int day = Integer.parseInt(tfDate.getText().substring(8));
 		Date date = new Date();
-//		date.setDate(day);
-//		date.setMonth(month);
-//		date.setYear(year);
-//		
-		Entry newEntry = new Entry(tfTitle.getText(), cbCategory.getSelectionModel().getSelectedItem(), date);
+		date.setDate(day);
+		date.setMonth(month);
+		date.setYear(year);
+		
+		DTOCostsEntry newEntry;
+		if(currentEntry == null){
+			newEntry = new DTOCostsEntry();
+			newEntry.setId(Math.round(CostEntryDAO.findNextId()));
+		}
+		else{
+			newEntry = CostEntryDAO.getEntryByPossibleIdAndName(currentEntry.getId(), currentEntry.getName());
+		}
+			
+				
+		newEntry.setName(tfTitle.getText());
+		newEntry.setCategory(cbCategory.getSelectionModel().getSelectedItem());
+		newEntry.setDate(date);
+		
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
 
 		for(CostTableData costData: tCosts.getItems()){
 			DTOSubcosts subcosts = new DTOSubcosts();
+			subcosts.setSubcostid(Math.round(SubcostDAO.findNextId()));
 			subcosts.setEntryid(CostEntryDAO.getEntrieID(newEntry));
 			subcosts.setCosttype(costData.getCbCosttype());
 			subcosts.setValue(Double.parseDouble(costData.getValue()));
@@ -152,6 +165,11 @@ public class ApplycationGuiController implements Initializable{
 		
 	}
 
+	private void addCost(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
 		private final CheckBox checkBox;
 		private ObservableValue<T> ov;
@@ -206,14 +224,14 @@ public class ApplycationGuiController implements Initializable{
 	}
 
 	private void initBindings() {
+		if(currentEntry != null){
 		SimpleStringProperty name = new SimpleStringProperty();
 		SimpleStringProperty cat = new SimpleStringProperty();
 		SimpleStringProperty date = new SimpleStringProperty();
 		name.set("");
-		cat.set("Kategorie wï¿½hlen");
+		cat.set("Kategorie wählen");
 		date.set("");
 		
-		if(currentEntry != null){
 			if(currentEntry.getName() != null){
 				name.set(currentEntry.getName());
 			}
@@ -223,11 +241,11 @@ public class ApplycationGuiController implements Initializable{
 			if(currentEntry.getDate() != null){
 				date.set(currentEntry.getDate().toString());
 			}
-		}
 		
 		tfTitle.textProperty().bind(name);
 		tfDate.textProperty().bind(date);
 		cbCategory.valueProperty().bind(cat);
+		}
 	}
 
 	public static void setCurrentEntry(DTOCostsEntry dtoEntry) {
@@ -236,6 +254,7 @@ public class ApplycationGuiController implements Initializable{
 		}
 		else{
 			currentEntry = new Entry(dtoEntry.getName(), dtoEntry.getCategory(), dtoEntry.getDate());
+			currentEntry.setId(dtoEntry.getId());
 		}
 	}
 

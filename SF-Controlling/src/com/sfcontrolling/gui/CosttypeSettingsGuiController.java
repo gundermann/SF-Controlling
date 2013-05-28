@@ -69,6 +69,7 @@ public class CosttypeSettingsGuiController implements Initializable{
 			Costtype cat = CosttypeDAO.getCategoryById(cbNewCategory.getSelectionModel().getSelectedItem());
 			tfNewTitle.setText(cat.getCategoryName());
 			tfSubsity.setText(String.valueOf(cat.getSubsityRate()));
+			updateSlider();
 		}
 	}
 
@@ -80,13 +81,17 @@ public class CosttypeSettingsGuiController implements Initializable{
 	@FXML
 	private void changeSubsityRateByTextField(){
 		try{
-			slSubsity.setValue(Double.parseDouble(tfSubsity.getText()));
+			updateSlider();
 		}
 		catch(NumberFormatException nfe){
 			slSubsity.setValue(0);
 		}
 	}
 	
+	private void updateSlider() {
+		slSubsity.setValue(Double.parseDouble(tfSubsity.getText()));
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		clearOrInitAllElements();

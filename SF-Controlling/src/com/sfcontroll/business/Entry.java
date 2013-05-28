@@ -7,6 +7,8 @@ import java.util.Date;
 
 public class Entry {
 
+	private int id;
+	
 	private String name;
 	
 	private Date date;
@@ -21,6 +23,20 @@ public class Entry {
 		this.date = date;
 		subcosts = new CostContainer();
 	}
+
+	
+	
+	public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 
 	public String getName() {
 		return name;
