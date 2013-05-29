@@ -2,17 +2,17 @@ package com.sfcontroll.business;
 
 public class Cost {
 
-	private String costtype;
+	private Costtype costtype;
 	
 	private double value;
 	
 	private double subsityValue;
 
 	public String getCosttype() {
-		return costtype;
+		return costtype.getCategoryName();
 	}
 
-	public void setCosttype(String costtype) {
+	public void setCosttype(Costtype costtype) {
 		this.costtype = costtype;
 	}
 
@@ -30,6 +30,10 @@ public class Cost {
 
 	public void setSubsityValue(double subsityValue) {
 		this.subsityValue = subsityValue;
+	}
+	
+	public double getCalculatedSubstityValue(){
+		return value*costtype.getSubsityRate()/100;
 	}
 	
 	

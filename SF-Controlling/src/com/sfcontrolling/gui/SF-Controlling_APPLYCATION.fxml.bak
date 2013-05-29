@@ -27,6 +27,35 @@
         </HBox>
         <Accordion prefHeight="400.0">
           <expandedPane>
+            <TitledPane fx:id="tpCosts" prefHeight="358.0" text="Kosten">
+              <content>
+                <AnchorPane>
+                  <children>
+                    <BorderPane prefHeight="324.0">
+                      <center>
+                        <TableView id="table" fx:id="tCosts" prefHeight="368.0" prefWidth="400.0">
+                          <columns>
+                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Kostenart" fx:id="ctcCosttype" />
+                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Betrag" fx:id="ctcValue" />
+                          </columns>
+                        </TableView>
+                      </center>
+                      <top>
+                        <ToolBar prefWidth="200.0">
+                          <items>
+                            <Button id="btAddcosts" fx:id="btAddCosts" mnemonicParsing="false" onAction="#addCost" text="Hinzufügen" />
+                            <Button fx:id="btDeleteCost" disable="true" mnemonicParsing="false" onAction="#deleteCost" text="Entfernen" />
+                          </items>
+                        </ToolBar>
+                      </top>
+                    </BorderPane>
+                  </children>
+                </AnchorPane>
+              </content>
+            </TitledPane>
+          </expandedPane>
+          <panes>
+            <fx:reference source="tpCosts" />
             <TitledPane id="tpCosts" fx:id="x1" prefHeight="358.0" text="Förderung">
               <content>
                 <AnchorPane>
@@ -46,35 +75,6 @@
                 </AnchorPane>
               </content>
             </TitledPane>
-          </expandedPane>
-          <panes>
-            <TitledPane fx:id="tpCosts" expanded="false" prefHeight="358.0" text="Kosten">
-              <content>
-                <AnchorPane>
-                  <children>
-                    <BorderPane prefHeight="324.0">
-                      <center>
-                        <TableView id="table" fx:id="tCosts" prefHeight="368.0" prefWidth="400.0">
-                          <columns>
-                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Kostenart" />
-                            <TableColumn editable="false" prefWidth="200.0" resizable="false" sortable="false" text="Betrag" />
-                          </columns>
-                        </TableView>
-                      </center>
-                      <top>
-                        <ToolBar prefWidth="200.0">
-                          <items>
-                            <Button id="btAddcosts" fx:id="btAddCosts" mnemonicParsing="false" onAction="#addCost" text="Hinzufügen" />
-                            <Button fx:id="btDeleteCost" disable="true" mnemonicParsing="false" onAction="#deleteCost" text="Entfernen" />
-                          </items>
-                        </ToolBar>
-                      </top>
-                    </BorderPane>
-                  </children>
-                </AnchorPane>
-              </content>
-            </TitledPane>
-            <fx:reference source="x1" />
           </panes>
         </Accordion>
         <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Speichern" />

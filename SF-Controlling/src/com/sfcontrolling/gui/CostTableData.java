@@ -1,40 +1,44 @@
 package com.sfcontrolling.gui;
 
-import javafx.beans.property.SimpleStringProperty;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 public class CostTableData {
 	
-	private SimpleStringProperty cbCosttype;
+	private SimpleObjectProperty<ComboBox<String>> cbCosttype;
 	
-	private SimpleStringProperty value;
+	private SimpleObjectProperty<TextField> value;
 	
 	public CostTableData(){
-		initTableData();
+		cbCosttype = new SimpleObjectProperty<ComboBox<String>>();
+		value = new SimpleObjectProperty<TextField>();
 	}
 
-	private void initTableData() {
-		this.cbCosttype = new SimpleStringProperty("Kostenart wählen");
-		
-	}
-
-	public String getCbCosttype() {
-		return cbCosttype.get();
-	}
-
-	public void setCbCosttype(String cbCosttype) {
-		this.cbCosttype.set(cbCosttype);
-	}
-
-	public String getValue() {
-		if(value == null){
-			return "0";
+	public ComboBox<String> getCbCosttype() {
+		if(cbCosttype.get() == null){
+			return new ComboBox<String>();
 		}else{
-			return value.getValue();
+			return  cbCosttype.get();
 		}
 	}
 
-	public void setValue(String value) {
-		this.value.setValue(value);
+	public void setCbCosttype(ComboBox<String> box) {
+		this.cbCosttype.set(box);
+	}
+
+	public TextField getValue() {
+		if(value.get() == null){
+			return new TextField();
+		}
+		else{
+			return value.get();
+		}
+	}
+
+	public void setValue(TextField tf) {
+		this.value.setValue(tf);
 	}
 	
 	

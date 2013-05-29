@@ -1,9 +1,12 @@
 package com.sfcontroll.db;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 public class SubcostDAO {
 
@@ -24,6 +27,14 @@ public class SubcostDAO {
 			maxId = (int) criteria.uniqueResult();
 		}
 		return ++maxId;
+	}
+
+	public static List<DTOSubcosts> getAllSubcostsByEntryId(int id) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction =  session.beginTransaction();
+		Criteria criteria = session.createCriteria(DTOSubcosts.class).add(Restrictions.eq("entryid", id));
+		transaction.commit();
+		return criteria.list();
 	}
 
 }

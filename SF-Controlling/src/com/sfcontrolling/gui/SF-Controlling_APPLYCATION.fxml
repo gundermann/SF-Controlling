@@ -27,6 +27,27 @@
         </HBox>
         <Accordion prefHeight="400.0">
           <expandedPane>
+            <TitledPane id="tpCosts" fx:id="x1" prefHeight="358.0" text="Förderung">
+              <content>
+                <AnchorPane>
+                  <children>
+                    <BorderPane prefHeight="324.0">
+                      <center>
+                        <TableView id="table" fx:id="tSubstities" prefHeight="368.0" prefWidth="400.0">
+                          <columns>
+                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Kostenart" fx:id="stcCosttype" />
+                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Betrag" fx:id="stcValue" />
+                            <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Bewilligt" fx:id="stcApplied" />
+                          </columns>
+                        </TableView>
+                      </center>
+                    </BorderPane>
+                  </children>
+                </AnchorPane>
+              </content>
+            </TitledPane>
+          </expandedPane>
+          <panes>
             <TitledPane fx:id="tpCosts" prefHeight="358.0" text="Kosten">
               <content>
                 <AnchorPane>
@@ -53,28 +74,7 @@
                 </AnchorPane>
               </content>
             </TitledPane>
-          </expandedPane>
-          <panes>
-            <fx:reference source="tpCosts" />
-            <TitledPane id="tpCosts" fx:id="x1" prefHeight="358.0" text="Förderung">
-              <content>
-                <AnchorPane>
-                  <children>
-                    <BorderPane prefHeight="324.0">
-                      <center>
-                        <TableView id="table" prefHeight="368.0" prefWidth="400.0">
-                          <columns>
-                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Kostenart" />
-                            <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false" text="Betrag" />
-                            <TableColumn editable="false" prefWidth="100.0" resizable="false" sortable="false" text="Bewilligt" />
-                          </columns>
-                        </TableView>
-                      </center>
-                    </BorderPane>
-                  </children>
-                </AnchorPane>
-              </content>
-            </TitledPane>
+            <fx:reference source="x1" />
           </panes>
         </Accordion>
         <Button fx:id="btAplly" mnemonicParsing="false" onAction="#applyEntry" text="Speichern" />

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 
 import com.sfcontroll.business.Cost;
+import com.sfcontroll.business.CostContainer;
 import com.sfcontroll.business.Costtype;
 import com.sfcontroll.business.Entry;
 import com.sfcontroll.db.CostEntryDAO;
@@ -14,10 +15,13 @@ import com.sfcontroll.db.CosttypeDAO;
 import com.sfcontroll.db.DTOCostsEntry;
 import com.sfcontroll.db.DTOSubcosts;
 import com.sfcontroll.db.SubcostDAO;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Text;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -30,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
@@ -51,10 +56,22 @@ public class ApplycationGuiController implements Initializable{
 	private TableView<CostTableData> tCosts;
 	
 	@FXML
-	private TableColumn<CostTableData, String> ctcCosttype;
+	private TableColumn<CostTableData, ComboBox<String>> ctcCosttype;
 	
 	@FXML 
-	private TableColumn<CostTableData, String> ctcValue;
+	private TableColumn<CostTableData, TextField> ctcValue;
+	
+	@FXML
+	private TableView<SubstityTableData> tSubstities;
+	
+	@FXML
+	private TableColumn<SubstityTableData, String> stcCosttype;
+	
+	@FXML
+	private TableColumn<SubstityTableData, TextField> stcValue;
+	
+	@FXML
+	private TableColumn<SubstityTableData, ToggleButton> stcApplied;
 	
 	@FXML
 	private Button btAddCosts;
@@ -93,10 +110,20 @@ public class ApplycationGuiController implements Initializable{
 		currentEntry.setCategory(cbCategory.getSelectionModel().getSelectedItem());
 		currentEntry.setDate(date);
 		
-		for(int i = 0 ; i < tCosts.getItems().size(); i++){
+		int lineCounter = -1;
+		for(CostTableData data : tCosts.getItems()){
+			lineCounter++;
 			Cost subcost = new Cost();
-			subcost.setCosttype(ctcCosttype.getCellData(i));
-			subcost.setValue(Double.parseDouble(ctcValue.getCellData(i)));
+			Costtype type = CosttypeDAO.getCategoryById(data.getCbCosttype().getSelectionModel().getSelectedItem());
+			subcost.setCosttype(type);
+			subcost.setValue(Double.parseDouble(data.getValue().getText()));
+			SubstityTableData substityData = tSubstities.getItems().get(lineCounter);
+			if(substityData.isApplied()){
+				subcost.setSubsityValue(Double.parseDouble(substityData.getSubstityValue().getText()));
+			}
+			else{
+				subcost.setSubsityValue(-1);
+			}
 			currentEntry.getSubcosts().add(subcost);
 		}
 		
@@ -117,7 +144,6 @@ public class ApplycationGuiController implements Initializable{
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
 		
 		for(Cost subcost: currentEntry.getSubcosts()){
-//			FIXME value and substity would not be saved in database
 			DTOSubcosts subcosts = new DTOSubcosts();
 			subcosts.setSubcostid(SubcostDAO.findNextId());
 			subcosts.setEntryid(CostEntryDAO.getEntrieID(newEntry));
@@ -129,91 +155,45 @@ public class ApplycationGuiController implements Initializable{
 
 	@FXML
 	private void addCost(){
-//		FIXME new method addCost with a parameter which defines the loaded Subcost
-		tCosts.setEditable(true);
-
-		ctcCosttype.setCellValueFactory(new PropertyValueFactory<CostTableData, String>("cbCosttype"));
-		ctcValue.setCellValueFactory(new PropertyValueFactory<CostTableData, String>("value"));
-		ctcValue.setEditable(true);
-		
-		ctcCosttype.setCellFactory(new Callback<TableColumn<CostTableData,String>,TableCell<CostTableData,String>>(){        
-			@Override
-			public TableCell<CostTableData, String> call(TableColumn<CostTableData, String> param) {                
-				TableCell<CostTableData, String> cell = new TableCell<CostTableData, String>(){
-					@Override
-					public void updateItem(String item, boolean empty) {
-						if(item!=null){
-
-						   ComboBox<String> box = new ComboBox<String>();
-						   box.promptTextProperty().set("Kostentyp wählen");
-//						   box.getSelectionModel().select(0);
-						   for(Costtype type : CosttypeDAO.getAllCategeriesFromDB()){
-							   box.getItems().add(type.getCategoryName());
-						   }
-						   setGraphic(box);
-						} 
-					}
-				};                           
-				return cell;
-			}	
-		});
-		
-		ctcValue.setCellFactory(new Callback<TableColumn<CostTableData,String>,TableCell<CostTableData,String>>(){        
-			@Override
-			public TableCell<CostTableData, String> call(TableColumn<CostTableData, String> param) {                
-				TableCell<CostTableData, String> cell = new TableCell<CostTableData, String>(){
-					@Override
-					public void updateItem(String item, boolean empty) {
-						if(item!=null){
-
-						   TextField tf = new TextField();
-						   setGraphic(tf);
-						} 
-					}
-				};                           
-				return cell;
-			}	
-		});
-		
-		tCosts.getItems().add(new CostTableData());
+		updateSubcosts(false);
 	}
 
-	private void addCost(Object object) {
-		// TODO Auto-generated method stub
-		
-	}
-
-//	public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
-//		private final CheckBox checkBox;
-//		private ObservableValue<T> ov;
-//
-//		public CheckBoxTableCell() {
-//			this.checkBox = new CheckBox();
-//			this.checkBox.setAlignment(Pos.CENTER);
-//
-//			setAlignment(Pos.CENTER);
-//			setGraphic(checkBox);
-//		} 
-//
-//		@Override 
-//		public void updateItem(T item, boolean empty) {
-//			super.updateItem(item, empty);
-//			if (empty) {
-//				setText(null);
-//				setGraphic(null);
-//			} else {
-//				setGraphic(checkBox);
-//				if (ov instanceof BooleanProperty) {
-//					checkBox.selectedProperty().unbindBidirectional((BooleanProperty) ov);
-//				}
-//				ov = getTableColumn().getCellObservableValue(getIndex());
-//				if (ov instanceof BooleanProperty) {
-//					checkBox.selectedProperty().bindBidirectional((BooleanProperty) ov);
-//				}
-//			}
-//		}
-//	}
 	
+	private CostTableData createNewTableEntryCosts() {
+		final CostTableData data = new CostTableData();
+		
+		ComboBox<String> box = new ComboBox<String>();
+		box.promptTextProperty().set("Kostentyp wählen");
+		for(Costtype type : CosttypeDAO.getAllCategeriesFromDB()){
+			box.getItems().add(type.getCategoryName());
+		}
+		
+		box.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent paramT) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		data.setCbCosttype(box);
+		
+		TextField tf = new TextField();
+		
+		tf.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent paramT) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		data.setValue(tf);
+		return data;
+	}
+
 	@FXML
 	private void deleteCost(){
 		
@@ -234,6 +214,68 @@ public class ApplycationGuiController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initCostsPane();
 		initBindings();
+		initTable();
+	}
+
+	private void initTable() {
+		ctcCosttype.setCellValueFactory(new PropertyValueFactory<CostTableData, ComboBox<String>>("cbCosttype"));
+		ctcValue.setCellValueFactory(new PropertyValueFactory<CostTableData, TextField>("value"));
+		ctcValue.setEditable(true);
+		tCosts.setEditable(true);
+		
+		stcCosttype.setCellValueFactory(new PropertyValueFactory<SubstityTableData, String>("costtype"));
+		stcCosttype.setEditable(false);
+		stcValue.setCellValueFactory(new PropertyValueFactory<SubstityTableData, TextField>("substityValue"));
+		stcValue.setEditable(true);
+		stcApplied.setCellValueFactory(new PropertyValueFactory<SubstityTableData, ToggleButton>("isApplied"));
+		tSubstities.setEditable(true);
+		
+		if(currentEntry != null){
+			updateSubcosts(true);
+		}
+	}
+
+	private void updateSubcosts(boolean initialization) {
+		if(initialization){
+			for(Cost subcost : currentEntry.getSubcosts()){
+				final CostTableData data = createNewTableEntryCosts();
+				
+				data.getCbCosttype().getSelectionModel().select(subcost.getCosttype());
+				data.getValue().setText(String.valueOf(subcost.getValue()));
+				
+				tCosts.getItems().add(data);
+				
+				final SubstityTableData substityData = createNewTableEntrySubstity();
+				
+				substityData.setCosttype(subcost.getCosttype());
+				if(subcost.getSubsityValue() < 0){
+					substityData.getSubstityValue().setText(String.valueOf(subcost.getCalculatedSubstityValue()));
+				}else{
+					substityData.getSubstityValue().setText(String.valueOf(subcost.getSubsityValue()));
+					substityData.getIsApplied().setSelected(true);
+				}
+				
+				tSubstities.getItems().add(substityData);
+			}
+		}
+		else{
+			tCosts.getItems().add(createNewTableEntryCosts());
+			tSubstities.getItems().add(createNewTableEntrySubstity());
+		}
+	}
+
+	private SubstityTableData createNewTableEntrySubstity() {
+		final SubstityTableData data = new SubstityTableData();
+		
+		data.setCosttype("Kategorie wählen");
+		
+		TextField tf = new TextField("0");
+		data.setSubstityValue(tf);
+		
+		ToggleButton btApply = new ToggleButton();
+		data.setIsApplied(btApply);
+		
+		return data;
 	}
 
 	private void initBindings() {
@@ -268,7 +310,21 @@ public class ApplycationGuiController implements Initializable{
 		else{
 			currentEntry = new Entry(dtoEntry.getName(), dtoEntry.getCategory(), dtoEntry.getDate());
 			currentEntry.setId(dtoEntry.getId());
+			currentEntry.setSubcosts(createSubcostContainer(dtoEntry.getId()));
 		}
+	}
+
+	private static CostContainer createSubcostContainer(int id) {
+		CostContainer container = new CostContainer();
+		for(DTOSubcosts dtoSubcost : SubcostDAO.getAllSubcostsByEntryId(id)){
+			Cost subcost = new Cost();
+			Costtype type = CosttypeDAO.getCategoryById(dtoSubcost.getCosttype());
+			subcost.setCosttype(type);
+			subcost.setValue(dtoSubcost.getValue());
+			subcost.setSubsityValue(dtoSubcost.getSubstity());
+			container.add(subcost);
+		}
+		return container;
 	}
 
 
