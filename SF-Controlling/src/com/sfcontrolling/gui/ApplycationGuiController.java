@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 
+import com.sfcontroll.business.Cost;
 import com.sfcontroll.business.Costtype;
 import com.sfcontroll.business.Entry;
 import com.sfcontroll.db.CostEntryDAO;
@@ -88,40 +89,51 @@ public class ApplycationGuiController implements Initializable{
 		date.setMonth(month);
 		date.setYear(year);
 		
+		currentEntry.setName(tfTitle.getText());
+		currentEntry.setCategory(cbCategory.getSelectionModel().getSelectedItem());
+		currentEntry.setDate(date);
+		
+		for(int i = 0 ; i < tCosts.getItems().size(); i++){
+			Cost subcost = new Cost();
+			subcost.setCosttype(ctcCosttype.getCellData(i));
+			subcost.setValue(Double.parseDouble(ctcValue.getCellData(i)));
+			currentEntry.getSubcosts().add(subcost);
+		}
+		
+		makeCurrentEntryPersistent();
+		
+		MainGuiController.reactOnNewEntry();
+		
+	}	
+	private void makeCurrentEntryPersistent() {
 		DTOCostsEntry newEntry;
-		if(currentEntry == null){
+		if(currentEntry.getId() == 0){
 			newEntry = new DTOCostsEntry();
 			newEntry.setId(Math.round(CostEntryDAO.findNextId()));
 		}
 		else{
 			newEntry = CostEntryDAO.getEntryByPossibleIdAndName(currentEntry.getId(), currentEntry.getName());
 		}
-			
-				
-		newEntry.setName(tfTitle.getText());
-		newEntry.setCategory(cbCategory.getSelectionModel().getSelectedItem());
-		newEntry.setDate(date);
-		
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
-
-		for(CostTableData costData: tCosts.getItems()){
+		
+		for(Cost subcost: currentEntry.getSubcosts()){
+//			FIXME value and substity would not be saved in database
 			DTOSubcosts subcosts = new DTOSubcosts();
-			subcosts.setSubcostid(Math.round(SubcostDAO.findNextId()));
+			subcosts.setSubcostid(SubcostDAO.findNextId());
 			subcosts.setEntryid(CostEntryDAO.getEntrieID(newEntry));
-			subcosts.setCosttype(costData.getCbCosttype());
-			subcosts.setValue(Double.parseDouble(costData.getValue()));
+			subcosts.setCosttype(subcost.getCosttype());
+			subcosts.setValue(subcost.getValue());
 			SubcostDAO.saveOrUpedateSubcost(subcosts);
 		}
-		MainGuiController.reactOnNewEntry();
-		
-	}	
+	}
+
 	@FXML
 	private void addCost(){
-		tCosts.getItems().add(new CostTableData());
+//		FIXME new method addCost with a parameter which defines the loaded Subcost
 		tCosts.setEditable(true);
 
-		ctcCosttype.setCellValueFactory(new PropertyValueFactory("cbCosttype"));
-		ctcValue.setCellValueFactory(new PropertyValueFactory("value"));
+		ctcCosttype.setCellValueFactory(new PropertyValueFactory<CostTableData, String>("cbCosttype"));
+		ctcValue.setCellValueFactory(new PropertyValueFactory<CostTableData, String>("value"));
 		ctcValue.setEditable(true);
 		
 		ctcCosttype.setCellFactory(new Callback<TableColumn<CostTableData,String>,TableCell<CostTableData,String>>(){        
@@ -163,6 +175,7 @@ public class ApplycationGuiController implements Initializable{
 			}	
 		});
 		
+		tCosts.getItems().add(new CostTableData());
 	}
 
 	private void addCost(Object object) {
@@ -170,36 +183,36 @@ public class ApplycationGuiController implements Initializable{
 		
 	}
 
-	public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
-		private final CheckBox checkBox;
-		private ObservableValue<T> ov;
-
-		public CheckBoxTableCell() {
-			this.checkBox = new CheckBox();
-			this.checkBox.setAlignment(Pos.CENTER);
-
-			setAlignment(Pos.CENTER);
-			setGraphic(checkBox);
-		} 
-
-		@Override 
-		public void updateItem(T item, boolean empty) {
-			super.updateItem(item, empty);
-			if (empty) {
-				setText(null);
-				setGraphic(null);
-			} else {
-				setGraphic(checkBox);
-				if (ov instanceof BooleanProperty) {
-					checkBox.selectedProperty().unbindBidirectional((BooleanProperty) ov);
-				}
-				ov = getTableColumn().getCellObservableValue(getIndex());
-				if (ov instanceof BooleanProperty) {
-					checkBox.selectedProperty().bindBidirectional((BooleanProperty) ov);
-				}
-			}
-		}
-	}
+//	public static class CheckBoxTableCell<S, T> extends TableCell<S, T> {
+//		private final CheckBox checkBox;
+//		private ObservableValue<T> ov;
+//
+//		public CheckBoxTableCell() {
+//			this.checkBox = new CheckBox();
+//			this.checkBox.setAlignment(Pos.CENTER);
+//
+//			setAlignment(Pos.CENTER);
+//			setGraphic(checkBox);
+//		} 
+//
+//		@Override 
+//		public void updateItem(T item, boolean empty) {
+//			super.updateItem(item, empty);
+//			if (empty) {
+//				setText(null);
+//				setGraphic(null);
+//			} else {
+//				setGraphic(checkBox);
+//				if (ov instanceof BooleanProperty) {
+//					checkBox.selectedProperty().unbindBidirectional((BooleanProperty) ov);
+//				}
+//				ov = getTableColumn().getCellObservableValue(getIndex());
+//				if (ov instanceof BooleanProperty) {
+//					checkBox.selectedProperty().bindBidirectional((BooleanProperty) ov);
+//				}
+//			}
+//		}
+//	}
 	
 	@FXML
 	private void deleteCost(){

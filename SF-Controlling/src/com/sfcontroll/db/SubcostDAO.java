@@ -14,14 +14,14 @@ public class SubcostDAO {
         transaction.commit();		
 	}
 
-	public static long findNextId() {
+	public static int findNextId() {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction =  session.beginTransaction();
 		Criteria criteria = session.createCriteria(DTOSubcosts.class).setProjection(Projections.max("subcostid"));
 		transaction.commit();
-		long maxId = 0;
+		int maxId = 0;
 		if(criteria.uniqueResult() != null){
-			maxId = (long) criteria.uniqueResult();
+			maxId = (int) criteria.uniqueResult();
 		}
 		return ++maxId;
 	}
