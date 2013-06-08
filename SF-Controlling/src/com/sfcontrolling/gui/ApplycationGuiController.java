@@ -10,8 +10,10 @@ import com.sfcontroll.business.Cost;
 import com.sfcontroll.business.CostContainer;
 import com.sfcontroll.business.Costtype;
 import com.sfcontroll.business.Entry;
+import com.sfcontroll.db.CategoryDAO;
 import com.sfcontroll.db.CostEntryDAO;
 import com.sfcontroll.db.CosttypeDAO;
+import com.sfcontroll.db.DTOCategory;
 import com.sfcontroll.db.DTOCostsEntry;
 import com.sfcontroll.db.DTOSubcosts;
 import com.sfcontroll.db.SubcostDAO;
@@ -91,8 +93,8 @@ public class ApplycationGuiController implements Initializable{
 	private static Entry currentEntry;
 	
 	private void initCostsPane() {
-		for(String category : MainGuiLoader.categoryContainer.keySet()){
-			cbCategory.getItems().add(category);
+		for(DTOCategory category : CategoryDAO.getAllCategoriesFromDB()){
+			cbCategory.getItems().add(category.getCategoryName());
 		}
 	}
 	
@@ -184,7 +186,7 @@ public class ApplycationGuiController implements Initializable{
 		
 		ComboBox<String> box = new ComboBox<String>();
 		box.promptTextProperty().set("Kostentyp wählen");
-		for(Costtype type : CosttypeDAO.getAllCategeriesFromDB()){
+		for(Costtype type : CosttypeDAO.getAllCosttypesFromDB()){
 			box.getItems().add(type.getCategoryName());
 		}
 		

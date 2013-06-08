@@ -22,7 +22,7 @@
 <mapping class="com.sfcontroll.db.DTOCostsEntry"/>
 <mapping class="com.sfcontroll.business.Costtype" />
 <mapping class="com.sfcontroll.db.DTOSubcosts" />
-
+<mapping class="com.sfcontroll.db.DTOCategory" />
 </session-factory>
 </hibernate-configuration>
 	

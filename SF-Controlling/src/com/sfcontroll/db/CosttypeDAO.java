@@ -10,7 +10,7 @@ import com.sfcontroll.business.Costtype;
 
 public class CosttypeDAO {
 
-	public static void saveOrUpdateCategory(Costtype cat)
+	public static void saveOrUpdateType(Costtype cat)
       {               
 		Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -18,7 +18,7 @@ public class CosttypeDAO {
         transaction.commit();
       }
 	
-	public static List<Costtype> getAllCategeriesFromDB(){
+	public static List<Costtype> getAllCosttypesFromDB(){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction =  session.beginTransaction();
 		Criteria criteria = session.createCriteria(Costtype.class);
