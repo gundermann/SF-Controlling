@@ -26,6 +26,12 @@ public class Entry {
 
 	
 	
+	public Entry() {
+		subcosts = new CostContainer();
+	}
+
+
+
 	public int getId() {
 		return id;
 	}

@@ -106,6 +106,9 @@ public class ApplycationGuiController implements Initializable{
 		date.setMonth(month);
 		date.setYear(year);
 		
+		if( currentEntry == null){
+			currentEntry = new Entry();
+		}
 		currentEntry.setName(tfTitle.getText());
 		currentEntry.setCategory(cbCategory.getSelectionModel().getSelectedItem());
 		currentEntry.setDate(date);
@@ -113,6 +116,7 @@ public class ApplycationGuiController implements Initializable{
 		int lineCounter = -1;
 		for(CostTableData data : tCosts.getItems()){
 			lineCounter++;
+			if(!isSubcostAlreadyApplied(data)){
 			Cost subcost = new Cost();
 			Costtype type = CosttypeDAO.getCategoryById(data.getCbCosttype().getSelectionModel().getSelectedItem());
 			subcost.setCosttype(type);
@@ -125,6 +129,8 @@ public class ApplycationGuiController implements Initializable{
 				subcost.setSubsityValue(-1);
 			}
 			currentEntry.getSubcosts().add(subcost);
+			
+			}
 		}
 		
 		makeCurrentEntryPersistent();
@@ -132,6 +138,13 @@ public class ApplycationGuiController implements Initializable{
 		MainGuiController.reactOnNewEntry();
 		
 	}	
+	private boolean isSubcostAlreadyApplied(CostTableData data) {
+		String costtypeName = data.getCbCosttype().getSelectionModel().getSelectedItem();
+		int entryId = currentEntry.getId();
+		
+		return (SubcostDAO.findSubcostByData(costtypeName, entryId) != null);
+	}
+
 	private void makeCurrentEntryPersistent() {
 		DTOCostsEntry newEntry;
 		if(currentEntry.getId() == 0){
@@ -141,15 +154,22 @@ public class ApplycationGuiController implements Initializable{
 		else{
 			newEntry = CostEntryDAO.getEntryByPossibleIdAndName(currentEntry.getId(), currentEntry.getName());
 		}
+		newEntry.setCategory(currentEntry.getCategory());
+		newEntry.setDate(currentEntry.getDate());
+		newEntry.setName(currentEntry.getName());
+		
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
 		
 		for(Cost subcost: currentEntry.getSubcosts()){
-			DTOSubcosts subcosts = new DTOSubcosts();
-			subcosts.setSubcostid(SubcostDAO.findNextId());
-			subcosts.setEntryid(CostEntryDAO.getEntrieID(newEntry));
-			subcosts.setCosttype(subcost.getCosttype());
-			subcosts.setValue(subcost.getValue());
-			SubcostDAO.saveOrUpedateSubcost(subcosts);
+			DTOSubcosts subcostsInDB = SubcostDAO.findSubcostByData(subcost.getCosttype(), currentEntry.getId());
+			if(subcostsInDB == null){
+				subcostsInDB = new DTOSubcosts();
+				subcostsInDB.setSubcostid(SubcostDAO.findNextId());
+			}
+			subcostsInDB.setEntryid(CostEntryDAO.getEntrieID(newEntry));
+			subcostsInDB.setCosttype(subcost.getCosttype());
+			subcostsInDB.setValue(subcost.getValue());
+			SubcostDAO.saveOrUpedateSubcost(subcostsInDB);
 		}
 	}
 

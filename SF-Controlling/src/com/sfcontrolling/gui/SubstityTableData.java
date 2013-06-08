@@ -44,7 +44,8 @@ public class SubstityTableData {
 
 	public void setSubstityValue(TextField substityValue) {
 		this.substityValue.set(substityValue);
-		this.substityValue.get().editableProperty().bind(new SimpleBooleanProperty(!isApplied()));
+		if(isApplied.get() != null)
+			this.substityValue.get().setEditable(!isApplied());
 	}
 
 	public ToggleButton getIsApplied() {
@@ -58,14 +59,12 @@ public class SubstityTableData {
 
 	public void setIsApplied(ToggleButton isApplied) {
 		this.isApplied.set(isApplied);
+		if(substityValue.get() != null)
+			this.substityValue.get().setEditable(!isApplied());
 	}
 
 	public boolean isApplied() {
-		if(isApplied.get() == null){
-			return false;
-		}else{
 			return isApplied.get().isSelected();
-		}
 	}
 	
 	

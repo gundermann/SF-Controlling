@@ -37,4 +37,16 @@ public class SubcostDAO {
 		return criteria.list();
 	}
 
+	public static DTOSubcosts findSubcostByData(String costtypeName, int entryId) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction =  session.beginTransaction();
+		Criteria criteria = session.createCriteria(DTOSubcosts.class).add(Restrictions.conjunction().add(Restrictions.eq("entryid", entryId)).add(Restrictions.eq("costtype", costtypeName)));
+		transaction.commit();
+		
+		if(criteria.list().isEmpty())
+			return null;
+		else
+			return (DTOSubcosts) criteria.list().get(0);
+	}
+
 }
