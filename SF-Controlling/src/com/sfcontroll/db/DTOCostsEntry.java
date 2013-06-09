@@ -1,11 +1,9 @@
 package com.sfcontroll.db;
 
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 
 @Entity
@@ -19,8 +17,7 @@ public class DTOCostsEntry{
 
 	private String category;
 
-	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date date;
+	private String date;
 	
 	
 	public DTOCostsEntry(){
@@ -48,11 +45,11 @@ public class DTOCostsEntry{
 		this.category = category;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

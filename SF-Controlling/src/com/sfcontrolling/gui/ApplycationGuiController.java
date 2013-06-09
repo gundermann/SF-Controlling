@@ -2,7 +2,9 @@ package com.sfcontrolling.gui;
 
 
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 
@@ -100,13 +102,11 @@ public class ApplycationGuiController implements Initializable{
 	
 	@FXML
 	protected void applyEntry(){
-		int year = Integer.parseInt(tfDate.getText().substring(0, 4));
-		int month = Integer.parseInt(tfDate.getText().substring(5, 7));
-		int day = Integer.parseInt(tfDate.getText().substring(8));
-		Date date = new Date();
-		date.setDate(day);
-		date.setMonth(month);
-		date.setYear(year);
+		int day = Integer.parseInt(tfDate.getText().substring(0, 2));
+		int month = Integer.parseInt(tfDate.getText().substring(3, 5));
+		int year = Integer.parseInt(tfDate.getText().substring(6));
+		GregorianCalendar date = new GregorianCalendar();
+		date.set(year, month, day);
 		
 		if( currentEntry == null){
 			currentEntry = new Entry();
@@ -157,7 +157,7 @@ public class ApplycationGuiController implements Initializable{
 			newEntry = CostEntryDAO.getEntryByPossibleIdAndName(currentEntry.getId(), currentEntry.getName());
 		}
 		newEntry.setCategory(currentEntry.getCategory());
-		newEntry.setDate(currentEntry.getDate());
+		newEntry.setDate(currentEntry.getDateAsString());
 		newEntry.setName(currentEntry.getName());
 		
 		CostEntryDAO.saveOrUpdateEntry(newEntry);
@@ -316,7 +316,7 @@ public class ApplycationGuiController implements Initializable{
 				cat.set(currentEntry.getCategory());
 			}
 			if(currentEntry.getDate() != null){
-				date.set(currentEntry.getDate().toString());
+				date.set(currentEntry.getDateAsString());
 			}
 		
 		tfTitle.textProperty().bind(name);
@@ -330,7 +330,19 @@ public class ApplycationGuiController implements Initializable{
 			currentEntry = null;
 		}
 		else{
-			currentEntry = new Entry(dtoEntry.getName(), dtoEntry.getCategory(), dtoEntry.getDate());
+			GregorianCalendar date = new GregorianCalendar();
+			
+			date.set(GregorianCalendar.DAY_OF_MONTH, Integer.parseInt(dtoEntry.getDate().substring(0, 2)));
+			try{
+				date.set(GregorianCalendar.MONTH, Integer.parseInt(dtoEntry.getDate().substring(3, 5)));
+				date.set(GregorianCalendar.YEAR, Integer.parseInt(dtoEntry.getDate().substring(6)));
+			}
+			catch(NumberFormatException nfe){
+				date.set(GregorianCalendar.MONTH, Integer.parseInt(dtoEntry.getDate().substring(3, 4)));
+				date.set(GregorianCalendar.YEAR, Integer.parseInt(dtoEntry.getDate().substring(5)));
+			}
+			
+			currentEntry = new Entry(dtoEntry.getName(), dtoEntry.getCategory(), date);
 			currentEntry.setId(dtoEntry.getId());
 			currentEntry.setSubcosts(createSubcostContainer(dtoEntry.getId()));
 		}

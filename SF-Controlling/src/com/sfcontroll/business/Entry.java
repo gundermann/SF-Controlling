@@ -1,6 +1,6 @@
 package com.sfcontroll.business;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 
@@ -11,13 +11,13 @@ public class Entry {
 	
 	private String name;
 	
-	private Date date;
+	private GregorianCalendar date;
 	
 	private String category;
 	
 	private CostContainer subcosts;
 	
-	public Entry(String name, String cat, Date date){
+	public Entry(String name, String cat, GregorianCalendar date){
 		this.name = name;
 		this.category = cat;
 		this.date = date;
@@ -52,11 +52,21 @@ public class Entry {
 		this.name = name;
 	}
 
-	public Date getDate() {
+	public GregorianCalendar getDate() {
 		return date;
 	}
+	
+	public String getDateAsString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(date.get(GregorianCalendar.DAY_OF_MONTH));
+		sb.append("-");
+		sb.append(date.get(GregorianCalendar.MONTH));
+		sb.append("-");
+		sb.append(date.get(GregorianCalendar.YEAR));
+		return sb.toString();
+	}
 
-	public void setDate(Date date) {
+	public void setDate(GregorianCalendar date) {
 		this.date = date;
 	}
 
